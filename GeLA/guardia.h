@@ -1,0 +1,2 @@
+void* Guardia (void* parameters);
+
