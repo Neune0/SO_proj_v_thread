@@ -26,8 +26,17 @@ void inizializzaSchermo(GameData* gameData){
 	
 	return;
 }
-void avviaProcessiBase(int* pipe_fd,Pids* pids,int* pipeRana_fd){
-	pids->pidRana = avviaRana(pipe_fd, pipeRana_fd); // avvia il processo che gestisce il movimento della rana
+void avviaProcessiBase(int* pipe_fd,Pids* pids,int* pipeRana_fd, GameData* gameData){
+	/*
+	pthread_t pidt_rana;
+	void *thread_rana_exit_value;
+	Params rana_args = {gameData, 'X'};
+
+	pthread_create(&pidt_rana,NULL, &moveProcess, &rana_args);
+	/**/
+	//pids->pidRana = avviaRana(pipe_fd, pipeRana_fd); // avvia il processo che gestisce il movimento della rana
+
+
 	gestoreMacchine(pipe_fd,pids->pidVeicoli); // avvia le auto e i camion
 	
 	gestoreTronchi(pipe_fd,pids->pidTronchi); // avvia i tronchi

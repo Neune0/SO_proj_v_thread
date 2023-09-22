@@ -1,6 +1,9 @@
 #ifndef INIZIALIZZA_H
 #define INIZIALIZZA_H
 #include "utilities.h"
+
+
+
 void inizializzaSchermo(GameData* gameData);
 void inizializzaOldPos(OldPos *old_pos);
 void inizializzaFlagMatrice(ScreenCell (*screenMatrix)[WIDTH]);
@@ -16,7 +19,7 @@ void inizializzaGameHUD(GameHUD *gameHud);
 void inizializzaOggettiTane(Tana* tane);
 void inizializzaSprites(Sprite* sprites);
 void inizializza(GameData* gameData);
-void avviaProcessiBase(int* pipe_fd,Pids* pids,int* pipeRana_fd);
+void avviaProcessiBase(int* pipe_fd,Pids* pids,int* pipeRana_fd, GameData* gameData);
 Sprite inizializzaSprite(int rows, int cols, char **sprite, int color);
 
 #endif

@@ -6,16 +6,26 @@ void drawProcess(int* pipe_fd) {
 	// forse non serve, pipe in cui la rana legge e disegna scrive in teoria
 	creaPipe(gameData->pipeRana_fd);
 	
+  inizializza(gameData); // inizializza i dati del gioco, qui si può leggere file di salvataggio ecc...
 	// avvia i processi rana, tronchi e veicoli
-	avviaProcessiBase(pipe_fd,&(gameData->pids),gameData->pipeRana_fd);
+  
+  pthread_t pidt_rana;
+	void *thread_rana_exit_value;
+	Params rana_args = {gameData, 'X'};
+
+	pthread_create(&pidt_rana,NULL, &moveProcess, &rana_args);
+
+	avviaProcessiBase(pipe_fd,&(gameData->pids),gameData->pipeRana_fd, gameData);
 	
-	inizializza(gameData); // inizializza i dati del gioco, qui si può leggere file di salvataggio ecc...
+	
 	
   while (1) {
   	read(pipe_fd[0], &(gameData->pipeData), sizeof(PipeData)); // Leggi le coordinate inviate dalla pipe
   	
     aggiorna(gameData,pipe_fd); // aggiorna stato del gioco
     
+
+
 		stampaMatrice(gameData->schermo.screenMatrix); // stampa a video solo celle della matrice dinamica modificate rispetto al ciclo precedente
 		
     refresh(); // Aggiorna la finestra

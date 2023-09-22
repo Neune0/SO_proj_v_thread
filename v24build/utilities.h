@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <signal.h>
+#include <pthread.h>
 
 #define WIDTH 104
 #define HEIGHT 37
@@ -171,6 +172,14 @@ typedef enum{
 	RANA_OBJ,
 	SFONDO_OBJ
 }TipoObj;
+
+
+typedef struct{
+    GameData *gameData;
+    char ch;
+}Params;
+
+
 
 void inizializzaNcurses();
 void creaPipe(int pipe_fd[2]);
