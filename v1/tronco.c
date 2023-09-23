@@ -49,6 +49,7 @@ void *tronco(void *parameters)
 		ScreenCell *matrice = (ScreenCell *)schermo->screenMatrix;
 		
 		PipeData* datiVecchi = (PipeData*)(&gameData->oldPos.general[id]);
+		
 		Sprite *sprite = (Sprite* ) &gameData->sprites[TRONCO_SPRITE]; 
 		char tronco_type = p->ch;
 
@@ -68,12 +69,7 @@ void *tronco(void *parameters)
    	//}while(i!=p->gameData.old_pos.general[0].id);
    	}while(i!=1);
 		PipeData pipeData;
-		/*
-		pipeData.x=spawn_rand;
-		pipeData.y=y;
-		pipeData.type='T';
-		pipeData.id=id;
-		/**/
+		
 		pipeData.x=spawn_rand;
 		pipeData.y=YTRONCOUNO;
 		pipeData.type= tronco_type ; //'T';
@@ -87,51 +83,42 @@ void *tronco(void *parameters)
 
 		int numero_spostamenti=0;
     while (1) {
+		pipeData.type='T';
+
     	//mvprintw(37+pipeData.id,2,"t%d numero spostamenti: %d",pipeData.id,numero_spostamenti);
     	if(numero_spostamenti==108 && pipeData.type=='T'){
     		// il tronco si trasforma in tronco nemico
     		pipeData.type='n';
 
-			// SEZ.CRITICA
-			pthread_mutex_lock(mutex);
-			//stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
-			pthread_mutex_unlock(mutex);
-    		//write(pipe_fd[1], &pipeData, sizeof(PipeData));
-    		
-			
-			pipeData.type='T';
     	}else{
     		if(direzione==1){
-    		if(pipeData.x + lunghezza_tronco + 1 < WIDTH){
-      		pipeData.x++;
-      	}
-      	else{
-      		direzione*=-1;
-      	}
-    	}else{
-    		if(pipeData.x - 1 > 0){
-    			pipeData.x--;
-    		}
-    		else{
-    			direzione*=-1;
-    		}
+				if(pipeData.x + lunghezza_tronco + 1 < WIDTH){
+					pipeData.x++;
+				}else{
+					direzione*=-1;
+				}
+			}else{
+				if(pipeData.x - 1 > 0){
+					pipeData.x--;
+				}
+				else{
+					direzione*=-1;
+				}
+			}
     	}
-    	
-    	// Invia le coordinate attraverso la pipe
-		
+		// Scrivi coordinate su gameData
 		//	SEZ.CRITICA
       	pthread_mutex_lock(mutex);
+		gameData->pipeData = pipeData;	// aggiorna i dati dentro gameData
+		PipeData* vettore_datiVecchi = (PipeData*)(&gameData->oldPos.general);//recupera array old_pos
+		aggiornaOggetto(gameData, vettore_datiVecchi, TRONCO_SPRITE);	// aggiorna oggetto in matrice e in gameData
 
-		aggiornaOldPos(datiVecchi, &pipeData);
-		stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
+		//aggiornaOldPos(datiVecchi, &pipeData);
+		//stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
 		//mvaddch(pipeData.y, pipeData.x, pipeData.type);
-		
-
 		pthread_mutex_unlock(mutex);
-		
-    	}
 
-			numero_spostamenti= (numero_spostamenti+1)%1000;
+		numero_spostamenti= (numero_spostamenti+1)%1000;
       // Aspetta un po' prima di generare nuove coordinate forse andrebbe diminuito
       usleep(100000);
     }
