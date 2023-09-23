@@ -26,18 +26,12 @@ void main()
     //Params tronco_args = {&mutex, gameData, 'T'};
 
     pthread_t pid_tronco;
-    pthread_create(&pid_tronco, NULL, &tronco, &tronco_args);
+    //pthread_create(&pid_tronco, NULL, &tronco, &tronco_args);
 
     
-    //pthread_create(&gameData->pids.pidTronchi[0], NULL, &tronco, &tronco_args);
+    pthread_create(&gameData->pids.pidTronchi[0], NULL, &tronco, &tronco_args);
 
     //pthread_create(&gameData->pids.pidRana, NULL, &Rana, &rana_args);
-
-    /* while disegna    */
-    //pthread_mutex_lock(&mutex);
-    //stampaMatrice( gameData->schermo.staticScreenMatrix);
-    //stampaMatrice( gameData->schermo.screenMatrix);
-    //pthread_mutex_unlock(&mutex);
 
     while(1){
         pthread_mutex_lock(&mutex);
@@ -53,7 +47,7 @@ void main()
     sleep(3);
     
     // gioco terminato
-    pthread_join(pid_tronco, &tronco_exit_value);
+    pthread_join(gameData->pids.pidTronchi[0], &tronco_exit_value);
 
     //pthread_join(gameData->pids.pidRana, &rana_exit_value);
 
