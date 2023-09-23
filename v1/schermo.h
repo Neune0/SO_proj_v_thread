@@ -4,10 +4,10 @@
 /*
 void aggiorna(GameData* gameData,int* pipe_fd);
 void cancellaOggetto(GameData* gameData, PipeData *old_pos, TipoSprite tipoSprite);
-void aggiornaOggetto(GameData* gameData, PipeData* old_pos, TipoSprite tipoSprite);
-void stampaSpriteInMatrice(PipeData* datiVecchi, Sprite* sprite, Schermo* schermo, PipeData* pipeData);
-void pulisciSpriteInMatrice(PipeData* datiVecchi, Sprite* sprite, Schermo* schermo);
 /**/
+void aggiornaOggetto(GameData* gameData, PipeData* old_pos, TipoSprite tipoSprite);
+void pulisciSpriteInMatrice(PipeData* datiVecchi, Sprite* sprite, Schermo* schermo);
+
 void stampaSpriteInMatrice(PipeData* datiVecchi, Sprite* sprite, Schermo* schermo, PipeData* pipeData);
 void stampaMatrice( ScreenCell (*screenMatrix)[WIDTH]);
 

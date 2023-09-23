@@ -28,7 +28,7 @@ tronco.o: tronco.c tronco.h #header.h
 openAll:
 	gedit *.c *.h &	
 
-clear:
+clean:
 	rm -fv *.o
 
 backup:

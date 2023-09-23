@@ -90,6 +90,7 @@ void aggiorna(GameData* gameData,int* pipe_fd){
 
 	return;
 }
+/**/
 //--------------------------------------------AGGIORNAMENTO OGGETTI IN MATRICE--------------------------------
 void aggiornaOggetto(GameData* gameData, PipeData* old_pos, TipoSprite tipoSprite) { //ok
 		PipeData* datiNuovi = &(gameData->pipeData); // i dati nuovi passati in pipe

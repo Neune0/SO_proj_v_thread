@@ -15,9 +15,9 @@ void main()
     Params tronco_args = {&mutex, gameData, 'T'};
 
 
-    //pthread_mutex_lock(mutex);
-    //stampaMatrice( gameData->schermo.staticScreenMatrix);
-    //pthread_mutex_unlock(mutex);
+    pthread_mutex_lock(&mutex);
+    stampaMatrice( gameData->schermo.staticScreenMatrix);
+    pthread_mutex_unlock(&mutex);
    
     /* esempio creazione del thread rana */
     void *rana_exit_value;
@@ -34,13 +34,17 @@ void main()
     //pthread_create(&gameData->pids.pidRana, NULL, &Rana, &rana_args);
 
     /* while disegna    */
-    pthread_mutex_lock(&mutex);
-    stampaMatrice( gameData->schermo.staticScreenMatrix);
+    //pthread_mutex_lock(&mutex);
+    //stampaMatrice( gameData->schermo.staticScreenMatrix);
     //stampaMatrice( gameData->schermo.screenMatrix);
-    pthread_mutex_unlock(&mutex);
+    //pthread_mutex_unlock(&mutex);
 
     while(1){
         pthread_mutex_lock(&mutex);
+        //stampaMatrice( gameData->schermo.staticScreenMatrix);
+        stampaMatrice( gameData->schermo.screenMatrix);
+        //PipeData tronco = gameData->oldPos.general[1];
+        //mvaddch(tronco.y,tronco.x, tronco.type);
         refresh();    
         pthread_mutex_unlock(&mutex);
     }

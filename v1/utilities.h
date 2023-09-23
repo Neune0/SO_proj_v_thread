@@ -65,7 +65,7 @@ typedef struct{
 }PipeData;
 
 typedef struct{
-	PipeData general[OLDPOSDIM];
+	PipeData general[OLDPOSDIM]; //0=rana [1,2,3]=tronchi [4-12]=veicoli
 	PipeData proiettili[MAXNPROIETTILI];
 	PipeData proiettiliNemici[MAXNPROIETTILINEMICI];
 }OldPos;
@@ -75,7 +75,7 @@ typedef struct{
 	int color;
 	bool is_changed;
 	int id;
-	char tipo;
+	char tipo;  // TipoObj ?
 }ScreenCell;
 
 

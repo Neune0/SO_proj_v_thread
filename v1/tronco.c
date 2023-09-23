@@ -50,18 +50,14 @@ void *tronco(void *parameters)
 		
 		PipeData* datiVecchi = (PipeData*)(&gameData->oldPos.general[id]);
 		Sprite *sprite = (Sprite* ) &gameData->sprites[TRONCO_SPRITE]; 
+		char tronco_type = p->ch;
+
 		//Schermo* schermo, 
 		//PipeData* pipeData
 	
 	pthread_mutex_unlock(mutex);
 
-
-	
 	//ScreenCell *matrice = p->gameData->schermo.screenMatrix;
-
-
-
-
 
    	// determina random la coordinata_X  di spawn del tronco 
    	int i=0;
@@ -80,7 +76,7 @@ void *tronco(void *parameters)
 		/**/
 		pipeData.x=spawn_rand;
 		pipeData.y=YTRONCOUNO;
-		pipeData.type='T';
+		pipeData.type= tronco_type ; //'T';
 		pipeData.id=1;
 		
 		int lunghezza_tronco= 9;
@@ -125,8 +121,12 @@ void *tronco(void *parameters)
 		
 		//	SEZ.CRITICA
       	pthread_mutex_lock(mutex);
-		//stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
-		mvaddch(pipeData.y, pipeData.x, pipeData.type);
+
+		aggiornaOldPos(datiVecchi, &pipeData);
+		stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
+		//mvaddch(pipeData.y, pipeData.x, pipeData.type);
+		
+
 		pthread_mutex_unlock(mutex);
 		
     	}
