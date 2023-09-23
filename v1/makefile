@@ -1,26 +1,29 @@
 DIRECTORY_NAME = GeLA 
 PWD = ~/EserciziSO/Threads/GeLA 					# this directory
 BACKUP_DIRECTORY = /media/sf_SOLabVM/
-HEADER_FILE = header.h
-OBJECT_FILE = mutex1.o ladro.o guardia.o avvocato.o
+HEADER_FILE = #header.h
+OBJECT_FILE = main.o schermo.o inizializza.o utilities.o tronco.o 
 
 #backup_directory
 
 
-Mutex1: $(OBJECT_FILE)
-	gcc $(OBJECT_FILE) -lpthread -lncurses -o Mutex1
+Frog: $(OBJECT_FILE)
+	gcc $(OBJECT_FILE) -lpthread -lncurses -o Frog
 	
-mutex1.o: mutex1.c 
-	gcc -c mutex1.c
+main.o: main.c 
+	gcc -c main.c
 	
-ladro.o: ladro.c ladro.h header.h
-	gcc -c ladro.c 		
+schermo.o: schermo.c schermo.h #header.h
+	gcc -c schermo.c 		
 	
-guardia.o: guardia.c guardia.h header.h
-	gcc -c guardia.c 
+inizializza.o: inizializza.c inizializza.h #header.h
+	gcc -c inizializza.c 
 
-avvocato.o: avvocato.c avvocato.h header.h
-	gcc -c avvocato.c 
+utilities.o: utilities.c utilities.h #header.h
+	gcc -c utilities.c 
+
+tronco.o: tronco.c tronco.h #header.h
+	gcc -c tronco.c 
 
 openAll:
 	gedit *.c *.h &	

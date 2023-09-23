@@ -175,6 +175,7 @@ typedef enum{
 
 
 typedef struct{
+	pthread_mutex_t *mutex;
     GameData *gameData;
     char ch;
 }Params;
