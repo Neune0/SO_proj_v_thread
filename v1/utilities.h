@@ -65,7 +65,7 @@ typedef struct{
 }PipeData;
 
 typedef struct{
-	PipeData general[OLDPOSDIM];
+	PipeData general[OLDPOSDIM]; //0=rana [1,2,3]=tronchi [4-12]=veicoli
 	PipeData proiettili[MAXNPROIETTILI];
 	PipeData proiettiliNemici[MAXNPROIETTILINEMICI];
 }OldPos;
@@ -75,7 +75,7 @@ typedef struct{
 	int color;
 	bool is_changed;
 	int id;
-	char tipo;
+	char tipo;  // TipoObj ?
 }ScreenCell;
 
 
@@ -116,12 +116,12 @@ typedef struct {
 } GameHUD;			// struttura con le posizioni della HUD.
 
 typedef struct{
-	pid_t pidRana;
-	pid_t pidProiettili[MAXNPROIETTILI];
-	pid_t pidProiettiliNemici[MAXNPROIETTILI];
-	pid_t pidNemici[3];
-	pid_t pidTronchi[3];
-	pid_t pidVeicoli[8];
+	pthread_t pidRana;
+	pthread_t pidProiettili[MAXNPROIETTILI];
+	pthread_t pidProiettiliNemici[MAXNPROIETTILI];
+	pthread_t pidNemici[3];
+	pthread_t pidTronchi[3];
+	pthread_t pidVeicoli[8];
 }Pids;
 
 typedef struct{
@@ -175,6 +175,7 @@ typedef enum{
 
 
 typedef struct{
+	pthread_mutex_t *mutex;
     GameData *gameData;
     char ch;
 }Params;
@@ -182,10 +183,12 @@ typedef struct{
 
 
 void inizializzaNcurses();
-void creaPipe(int pipe_fd[2]);
 void inizializzaColorazione();
-void uccidiProcesso( pid_t *array_pid, int id_processo);
-int id_disponibile(pid_t *array_pid, int lunghezza);
+
+//void creaPipe(int pipe_fd[2]);
+//void uccidiProcesso( pid_t *array_pid, int id_processo);
+//int id_disponibile(pid_t *array_pid, int lunghezza);
+
 void aggiornaOldPos(PipeData *old_pos,PipeData *pipeData);
 #endif // UTILITIES_H
 

@@ -1,0 +1,4 @@
+void* Ladro(void* parameters);
+
+
+

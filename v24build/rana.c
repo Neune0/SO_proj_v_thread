@@ -1,4 +1,5 @@
 #include "rana.h"
+/*
 pid_t avviaRana(int* pipe_fd, int* pipe_rana){
 	pid_t move_pid = fork(); // pid che contiente il pid della rana
     
@@ -13,7 +14,14 @@ pid_t avviaRana(int* pipe_fd, int* pipe_rana){
   }
 	return move_pid;
 }
-void moveProcess(int* pipe_fd, int* pipe_rana) {
+/**/
+
+void moveProcess(void* parameters) {
+
+    Params *param;
+    param = (Params*)parameters;
+    Schermo *matrice =&(param->gameData->schermo);
+
 		// limiti dell' area di gioco per la rana
 		int minAreaGiocoX = 0;
 		int minAreaGiocoY = 4;
@@ -28,8 +36,15 @@ void moveProcess(int* pipe_fd, int* pipe_rana) {
 		
 		
 		 // Invia le coordinate iniziali attraverso la pipe
-    write(pipe_fd[1], &pipeData, sizeof(PipeData));
+    //write(pipe_fd[1], &pipeData, sizeof(PipeData));
     
+    matrice->screenMatrix[pipeData.x][pipeData.y].ch = pipeData.type;
+    matrice->screenMatrix[pipeData.x][pipeData.y].color = RANA;
+    matrice->screenMatrix[pipeData.x][pipeData.y].is_changed = true;
+    matrice->screenMatrix[pipeData.x][pipeData.y].id = 0;
+    //matrice->screenMatrix[pipeData.x][pipeData.y].tipo = 
+
+
 		noecho();
 		int ch='D';
     while (1) {
@@ -72,8 +87,11 @@ void moveProcess(int* pipe_fd, int* pipe_rana) {
         }
 				
         // Invia le coordinate attraverso la pipe
-        write(pipe_fd[1], &pipeData, sizeof(PipeData));
-        
+        //write(pipe_fd[1], &pipeData, sizeof(PipeData));
+        matrice->screenMatrix[pipeData.x][pipeData.y].ch = pipeData.type;
+        matrice->screenMatrix[pipeData.x][pipeData.y].color = RANA;
+        matrice->screenMatrix[pipeData.x][pipeData.y].is_changed = true;
+        matrice->screenMatrix[pipeData.x][pipeData.y].id = 0;
 			
         // Aspetta un po' prima di generare nuove coordinate forse andrebbe diminuito
         usleep(1000);
@@ -82,7 +100,7 @@ void moveProcess(int* pipe_fd, int* pipe_rana) {
     return;
 }//end moveProcess 
 
-
+/*
 pid_t resetRana(int* pipe_fd, int* pipe_rana, pid_t pid_processo_rana){
 		pid_t newPid;
 		kill(pid_processo_rana, SIGKILL);
@@ -90,7 +108,7 @@ pid_t resetRana(int* pipe_fd, int* pipe_rana, pid_t pid_processo_rana){
 		newPid = avviaRana(pipe_fd, pipe_rana);
 		return newPid;
 }
-
+/**/
 
 
 

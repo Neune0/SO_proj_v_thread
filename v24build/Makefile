@@ -11,7 +11,7 @@ CC := gcc
 CFLAGS := -Wall -Wextra
 
 # Librerie necessarie
-LDLIBS := -lncurses
+LDLIBS := -lncurses -lpthread
 
 
 # Regola di compilazione dell'eseguibile
