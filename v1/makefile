@@ -2,7 +2,7 @@ DIRECTORY_NAME = GeLA
 PWD = ~/EserciziSO/Threads/GeLA 					# this directory
 BACKUP_DIRECTORY = /media/sf_SOLabVM/
 HEADER_FILE = #header.h
-OBJECT_FILE = main.o schermo.o inizializza.o utilities.o tronco.o 
+OBJECT_FILE = main.o schermo.o inizializza.o utilities.o rana.o tronco.o 
 
 #backup_directory
 
@@ -22,8 +22,13 @@ inizializza.o: inizializza.c inizializza.h #header.h
 utilities.o: utilities.c utilities.h #header.h
 	gcc -c utilities.c 
 
+rana.o: rana.c rana.h #header.h
+	gcc -c rana.c 
+
 tronco.o: tronco.c tronco.h #header.h
 	gcc -c tronco.c 
+
+
 
 openAll:
 	gedit *.c *.h &	

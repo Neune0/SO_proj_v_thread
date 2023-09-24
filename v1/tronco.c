@@ -1,22 +1,29 @@
 #include "tronco.h"
-/*
-void gestoreTronchi(int* pipe_fd,pid_t* pid_tronchi){
+
+void gestoreTronchi(GameData *gameData, Params *tronco_args){
+	//pthread_mutex_t *mutex = tronco_args->mutex;
 	int num_tronchi = NTRONCHI;
-  int dir_tronco[NTRONCHI];
-  dir_tronco[0] = (rand() % 2 == 1) ? 1 : -1;
+  	int dir_tronco[NTRONCHI];
+  	dir_tronco[0] = (rand() % 2 == 1) ? 1 : -1;
     		
-  for (int i = 1; i < num_tronchi; i++) {
-  	dir_tronco[i] = -1 * dir_tronco[i - 1];
+  	for (int i = 1; i < num_tronchi; i++) {
+  		dir_tronco[i] = -1 * dir_tronco[i - 1];
 	}
-					
-  pid_tronchi[0]=avviaTronco(pipe_fd,YTRONCOUNO,dir_tronco,1);
-  usleep(200000);
-  pid_tronchi[1]=avviaTronco(pipe_fd,YTRONCODUE,dir_tronco,2);
-  usleep(300000);
-  pid_tronchi[2]=avviaTronco(pipe_fd,YTRONCOTRE,dir_tronco,3);
+
+	pthread_mutex_lock(tronco_args->mutex);
+		for(int j=0; j<num_tronchi; j++){
+			gameData->arrayDirTronchi[j] = dir_tronco[j];
+			;
+			//Params tronco_args = {&mutex, gameData, 'T', 1};
+			tronco_args->id = j+1;
+			;
+			pthread_create(&gameData->pids.pidTronchi[j], NULL, &tronco, tronco_args);
+			;
+		}
+	pthread_mutex_unlock(tronco_args->mutex);
 
 }
-
+/*
 pid_t avviaTronco(int* pipe_fd,int x_spawn,int *dir_tronco,int id){
 	pid_t tronco_pid = fork();
 	if (tronco_pid < 0) {
@@ -36,27 +43,30 @@ pid_t avviaTronco(int* pipe_fd,int x_spawn,int *dir_tronco,int id){
 //void tronco(GameData *gameData, int y, int direzione_x, int id)
 void *tronco(void *parameters) 
 {
+	int direzione = 1; // solo di prova
 
-	int id = 1;
 	Params *p = (Params*) parameters;
-	pthread_mutex_t *mutex = p->mutex;
+	int id = p->id;
+	//pthread_mutex_t *mutex = p->mutex;
 	// recupero puntatori 
 	// SEZ.CRITICA 
-	pthread_mutex_lock(mutex);
+	pthread_mutex_lock(p->mutex);
 			
 		GameData *gameData = p->gameData;
 		Schermo *schermo = (Schermo*) &(gameData->schermo);
-		ScreenCell *matrice = (ScreenCell *)schermo->screenMatrix;
+		ScreenCell *matrice = (ScreenCell *)schermo->screenMatrix; // ?
 		
 		PipeData* datiVecchi = (PipeData*)(&gameData->oldPos.general[id]);
 		
-		Sprite *sprite = (Sprite* ) &gameData->sprites[TRONCO_SPRITE]; 
+		Sprite *sprite = (Sprite* ) &gameData->sprites[TRONCO_SPRITE]; // ?
 		char tronco_type = p->ch;
+
+		//int direzione = p->gameData->arrayDirTronchi[id-1]; // recupera direzione dall'array
 
 		//Schermo* schermo, 
 		//PipeData* pipeData
 	
-	pthread_mutex_unlock(mutex);
+	pthread_mutex_unlock(p->mutex);
 
 	//ScreenCell *matrice = p->gameData->schermo.screenMatrix;
 
@@ -64,24 +74,29 @@ void *tronco(void *parameters)
    	int i=0;
    	int spawn_rand;
    	do{
-   		 spawn_rand = rand() % 100;
-   		 i++;
-   	//}while(i!=p->gameData.old_pos.general[0].id);
-   	}while(i!=1);
-		PipeData pipeData;
-		
-		pipeData.x=spawn_rand;
-		pipeData.y=YTRONCOUNO;
-		pipeData.type= tronco_type ; //'T';
-		pipeData.id=1;
-		
-		int lunghezza_tronco= 9;
-		
-		//int direzione = direzione_x;
-		int direzione = 1;
+		spawn_rand = rand() % 100;
+		i++;
+   	}while(i!=id);
+	
+	PipeData pipeData;
+	pipeData.x=spawn_rand;
+	pipeData.type= tronco_type ; //'T';
+	pipeData.id=id;
 
 
-		int numero_spostamenti=0;
+	switch(id){
+		case 1:
+			pipeData.y=YTRONCOUNO;
+			break;
+		case 2:
+			pipeData.y=YTRONCODUE;
+			break;
+		case 3:
+			pipeData.y=YTRONCOTRE;
+			break;
+	}
+	int lunghezza_tronco= 9;
+	int numero_spostamenti=0;
     while (1) {
 		pipeData.type='T';
 
@@ -108,18 +123,16 @@ void *tronco(void *parameters)
     	}
 		// Scrivi coordinate su gameData
 		//	SEZ.CRITICA
-      	pthread_mutex_lock(mutex);
+      	pthread_mutex_lock(p->mutex);
 		gameData->pipeData = pipeData;	// aggiorna i dati dentro gameData
 		PipeData* vettore_datiVecchi = (PipeData*)(&gameData->oldPos.general);//recupera array old_pos
 		aggiornaOggetto(gameData, vettore_datiVecchi, TRONCO_SPRITE);	// aggiorna oggetto in matrice e in gameData
-
-		//aggiornaOldPos(datiVecchi, &pipeData);
-		//stampaSpriteInMatrice(datiVecchi, sprite, schermo, &pipeData);
-		//mvaddch(pipeData.y, pipeData.x, pipeData.type);
-		pthread_mutex_unlock(mutex);
+		
+		pthread_mutex_unlock(p->mutex);
+		usleep(FPS);
 
 		numero_spostamenti= (numero_spostamenti+1)%1000;
       // Aspetta un po' prima di generare nuove coordinate forse andrebbe diminuito
-      usleep(100000);
+      
     }
 }

@@ -10,4 +10,5 @@
 void *tronco(void *parameters);
 //pid_t avviaTronco(int* pipe_fd,int x_spawn,int *dir_tronco,int id);
 //void gestoreTronchi(int* pipe_fd,pid_t* pid_tronchi);
+void gestoreTronchi(GameData *gameData, Params *tronco_args);
 #endif

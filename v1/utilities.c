@@ -61,3 +61,19 @@ void aggiornaDirezioneTronchi(PipeData *pipeData, PipeData *old_pos, int *arr_di
 		int tronco_id = pipeData->id;													//individua che tronco hai letto
 		arr_dir_tronchi[tronco_id] = pipeData->x - old_pos->x	;//controlla la direzione in base alla posizione precedente
 }
+
+void timerReset(time_t *current_time, time_t *start_time)
+{
+	*start_time = time(current_time);
+}
+
+int timer(time_t *current_time, time_t *start_time, int max_time)	//ritorna i secondi di countdown
+{
+	int seconds=max_time;
+	time(current_time);
+    double diff_time = difftime(*current_time, *start_time);
+    int diff_time_sec = (int) diff_time;
+    if(diff_time_sec > 0) seconds=(max_time - diff_time_sec)%max_time;
+    if(diff_time_sec == max_time) *start_time = *current_time;	//resetta il tempo di start
+    return seconds;
+}

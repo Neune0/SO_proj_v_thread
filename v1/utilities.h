@@ -50,6 +50,13 @@
 #define TANA_ROWS 3
 #define TANA_COLS 11
 
+#define FRAME 10
+#define SECOND 1000000
+#define FPS SECOND/FRAME
+//#define FPS  100000
+
+
+
 typedef enum 
 {
 	RANA_SPRITE, TRONCO_SPRITE, AUTO_SPRITE, CAMION_SPRITE, PROIETTILE_SPRITE, PROIETTILE_NEMICO_SPRITE, NEMICO_SPRITE,OPEN,CLOSE
@@ -156,6 +163,16 @@ typedef struct{
 	int pipeRana_fd [2];
 }GameData;
 
+
+typedef struct{
+	pthread_mutex_t *mutex;
+    GameData *gameData;
+    char ch;
+	int id;
+}Params;
+
+
+
 typedef enum{
 	TANA_OPEN_OBJ, 
 	TANA_CLOSE_OBJ,
@@ -174,11 +191,7 @@ typedef enum{
 }TipoObj;
 
 
-typedef struct{
-	pthread_mutex_t *mutex;
-    GameData *gameData;
-    char ch;
-}Params;
+
 
 
 
@@ -190,5 +203,8 @@ void inizializzaColorazione();
 //int id_disponibile(pid_t *array_pid, int lunghezza);
 
 void aggiornaOldPos(PipeData *old_pos,PipeData *pipeData);
+
+void timerReset(time_t *current_time, time_t *start_time);
+int timer(time_t *current_time, time_t *start_time, int max_time);//ritorna i secondi di countdown
 #endif // UTILITIES_H
 
